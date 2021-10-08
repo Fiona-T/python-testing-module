@@ -2,24 +2,53 @@
 import unittest
 # import class to test
 from student import Student
+from datetime import timedelta
 
 
 class TestStudent(unittest.TestCase):
-    def test_full_name(self):
-        student = Student("John", "Doe")
+    # to set up once, before any test is ran
+    # class method means it acts on the class instead of instance of class
+    @classmethod
+    def setUpClass(cls):
+        print("set up class")
 
-        self.assertEqual(student.full_name, "John Doe")
+    # to tear down once, after all tests are ran
+    # class method means it acts on the class instead of instance of class
+    @classmethod
+    def tearDownClass(cls):
+        print("tear down class")
+
+    # to run before each test method
+    def setUp(self):
+        print('set up')
+        self.student = Student("John", "Doe")
+
+    # to run after each test method - not needed in this case so just printing
+    def tearDown(self):
+        print('tear down')
+
+    def test_full_name(self):
+        print('test full name')
+        self.assertEqual(self.student.full_name, "John Doe")
 
     def test_alert_santa(self):
-        student = Student("John", "Doe")
-        student.alert_santa()
-
-        self.assertTrue(student.naughty_list)
+        print('test alert santa')
+        self.student.alert_santa()
+        self.assertTrue(self.student.naughty_list)
 
     def test_email(self):
-        student = Student("John", "Doe")
+        print('test email')
         # lower case for email address
-        self.assertEqual(student.email, "john.doe@email.com")
+        self.assertEqual(self.student.email, "john.doe@email.com")
+
+    def test_apply_extension(self):
+        current_end_date = self.student.end_date
+        # import timedelta above for this
+        test_end_date = current_end_date + timedelta(days=5)
+        self.student.apply_extension(5)
+        self.assertEqual(self.student.end_date, test_end_date)
+        # alternative instead of using test_end_date above
+        # self.assertEqual(self.student.end_date, current_end_date + timedelta(days=5))
 
 
 if __name__ == "__main__":
