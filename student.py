@@ -1,4 +1,7 @@
+# for start date, and adding days to get end date
 from datetime import date, timedelta
+# to make request to API service
+import requests
 
 
 class Student:
@@ -27,8 +30,18 @@ class Student:
     def apply_extension(self, days):
         self.end_date = self.end_date + timedelta(days=days)
 
+    def course_schedule(self):
+        response = requests.get(
+            f"http://company.com/course-schedule/{self._last_name}/{self._first_name}")
 
-s = Student("Mary", "Smith")
-print(s.end_date)
-s.apply_extension(4)
-print(s.end_date)
+        # check if response successful
+        if response.ok:
+            return response.text
+        else:
+            return "Something went wrong with the request"
+
+
+# s = Student("Mary", "Smith")
+# print(s.end_date)
+# s.apply_extension(4)
+# print(s.end_date)
